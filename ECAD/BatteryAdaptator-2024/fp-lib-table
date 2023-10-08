@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "PAMI")(type "KiCad")(uri "C:/Users/adrie/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/PAMI.pretty")(options "")(descr ""))
+)

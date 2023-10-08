@@ -1,0 +1,34 @@
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 220:Plugin executed on: 'win32'
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 221:Plugin executed with python version: '3.9.16 (main, May 18 2023, 07:48:16) [MSC v.1936 64 bit (AMD64)]'
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 222:KiCad build version: 7.0.6
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 223:Plugin version: 1.0.9
+
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 228:Screen sizes: [wx.Size(1920, 1080), wx.Size(1920, 1080), wx.Size(1920, 1080), wx.Size(768, 1024)]
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 235:Dialog size: wx.Size(213, 81)
+10-08 23:43:16 com_github_MitjaNemec_Archive3DModels.action_archive_3d_models 237:Char size: 15
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 24:Starting to archive 3D models
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: J1
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 56:Trying to copy: C:/Users/adrie/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/USB_A_3_Vertical-USB A 3.0 Vertical.step
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 136:Remapping: C:/Users/adrie/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/USB_A_3_Vertical-USB A 3.0 Vertical.step
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-652319A9
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-652319B5
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-652319B5
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-652319A9
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-65231966
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: kibuzzard-65231966
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: G***
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: G***
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: G***
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: G***
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: G***
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: J3
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 56:Trying to copy: ${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 136:Remapping: ${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x04_P2.54mm_Vertical.wrl
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: R1
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 56:Trying to copy: ${KICAD6_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.wrl
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 136:Remapping: ${KICAD6_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.wrl
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: H2
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: H1
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 45:Getting 3D models for footprint of: D1
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 56:Trying to copy: ${KICAD6_3DMODEL_DIR}/LED_SMD.3dshapes/LED_1206_3216Metric.wrl
+10-08 23:43:23 com_github_MitjaNemec_Archive3DModels.archive_3d_models 136:Remapping: ${KICAD6_3DMODEL_DIR}/LED_SMD.3dshapes/LED_1206_3216Metric.wrl
