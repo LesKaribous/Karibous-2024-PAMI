@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "TMC2208_SILENTSTEPSTICK")(type "KiCad")(uri "/home/barbatronic/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/TMC2208_SILENTSTEPSTICK/TMC2208_SILENTSTEPSTICK.kicad_sym")(options "")(descr ""))
+)
