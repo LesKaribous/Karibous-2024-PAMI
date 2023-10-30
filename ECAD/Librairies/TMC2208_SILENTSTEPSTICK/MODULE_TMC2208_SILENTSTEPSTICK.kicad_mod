@@ -76,8 +76,23 @@
   (pad "VREF" thru_hole circle (at 2.54 7.239) (size 1.524 1.524) (drill 1.016) (layers "*.Cu" "*.Mask")
     (solder_mask_margin 0.102) (tstamp 3bbb7793-aef9-4eb5-bbf1-3e879936444d))
   (model "/home/barbatronic/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/TMC2208_SILENTSTEPSTICK/TMC2208_SILENTSTEPSTICK.step"
-    (offset (xyz 0 0 6.5))
+    (offset (xyz 0 0 7))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))
+  )
+  (model "/home/barbatronic/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/PinSocket_1x08_P2.54mm_Vertical.step"
+    (offset (xyz -6.35 8.9 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "/home/barbatronic/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/PinSocket_1x08_P2.54mm_Vertical.step"
+    (offset (xyz 6.35 8.9 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+  (model "/home/barbatronic/Documents/GitHub/Karibous-2024-PAMI/ECAD/Librairies/TMC2208_SILENTSTEPSTICK/Dissipateur-DissipateurTMC2208.step"
+    (offset (xyz 0 2 11.3))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 90))
   )
 )
