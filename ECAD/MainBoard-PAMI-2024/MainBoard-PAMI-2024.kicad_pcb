@@ -334,7 +334,7 @@
       (net 1 "GND") (pinfunction "K") (pintype "passive") (tstamp 2645902a-e06f-44df-b760-d2e910f841cf))
     (pad "2" smd roundrect (at 0.7 0 180) (size 0.6 0.7) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25)
       (net 21 "Net-(D7-A)") (pinfunction "A") (pintype "passive") (tstamp 1291ad59-9784-4845-80a6-cd0f061e93ef))
-    (model "${KICAD6_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SOD-523.wrl"
+    (model "${KIPRJMOD}/Packages3D/D_SOD-523.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -3829,7 +3829,7 @@
       (net 1 "GND") (pinfunction "K") (pintype "passive") (tstamp 5823453b-40d5-44d1-8141-467921ad4d6d))
     (pad "2" smd roundrect (at 0.7 0 180) (size 0.6 0.7) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25)
       (net 29 "Net-(D6-A)") (pinfunction "A") (pintype "passive") (tstamp 09c98c1e-e65c-4bed-9cdf-6565d3d4fe7b))
-    (model "${KICAD6_3DMODEL_DIR}/Diode_SMD.3dshapes/D_SOD-523.wrl"
+    (model "${KIPRJMOD}/Packages3D/D_SOD-523.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
