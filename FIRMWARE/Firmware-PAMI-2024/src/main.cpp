@@ -37,8 +37,13 @@ void loop()
 {
   //updateMatchTime();
   //testAntenne();
-  testSensor();
+  //testSensor();
   //testMatch();
+  enableMotors();
+  go(100);
+  turn(90);
+  turn(-90);
+  go(-100);
 }
 
 void waitStart(){

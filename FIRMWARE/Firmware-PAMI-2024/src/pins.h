@@ -4,10 +4,10 @@
 
 // Pins Moteurs - Drivers
 const int EN      = 48;
-const int STEP_X  = 11;
-const int DIR_X   = 10;
-const int STEP_Y  = 14;
-const int DIR_Y   = 13;
+const int STEP_G  = 11;
+const int DIR_G   = 10;
+const int STEP_D  = 14;
+const int DIR_D   = 13;
 const int MS1 = 47;
 const int MS2 = 21;
 

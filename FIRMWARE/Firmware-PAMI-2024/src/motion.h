@@ -3,13 +3,14 @@
 #define MOTION_H
 
 #include <Arduino.h>
-#include <AccelStepper.h>
+#include <TeensyStep.h>
 
 #include "pins.h" 
 #include "ihm.h" 
 
 #define STEPS_PER_REVOLUTION 200    // Nombre de pas par tour du moteur
 #define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres
+#define WHEEL_DISTANCE_MM 85.0f     // Distance entre les roues en millimètres
 
 #define MAX_SPEED 10000.0f
 #define ACCELERATION 5000.0f
@@ -51,11 +52,12 @@ void setAcceleration(float _acceleration = ACCELERATION);
 void updateMotion();
 
 long convertDistToStep(float _dist);
+long convertAngleToStep(float angle);
 
 // Déplacements relatifs
-void go(float dist);
-void turn(float angle);
-void turnGo(float angle, float dist);
+void go(float _dist);
+void turn(float _angle);
+void turnGo(float _angle, float _dist);
 
 // Déplacements absolus
 void goTo(float _x, float _y, float _rot);

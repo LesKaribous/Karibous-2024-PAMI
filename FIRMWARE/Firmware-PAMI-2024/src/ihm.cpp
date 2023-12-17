@@ -5,7 +5,7 @@
 bool team = TEAM_BLUE;
 bool teamSelected = false;
 bool modeDebug = true; // Mettre son robot en mode debug : oui / Mettre son robot en mode "des bugs" : Non - HistoriCode97 - 03/12/2023
-bool modeDebugLCD = false;
+bool modeDebugLCD = true;
 
 U8G2_SSD1306_128X32_UNIVISION_2_HW_I2C u8g2(U8G2_R0); //HW stand for "Hardware"... You idiot
 Adafruit_NeoPixel led = Adafruit_NeoPixel(1, ledStatus, NEO_GRB + NEO_KHZ800);
