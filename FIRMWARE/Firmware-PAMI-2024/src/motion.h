@@ -8,17 +8,57 @@
 #include "pins.h" 
 #include "ihm.h" 
 
-// Position absolue du robot
-extern float x, y, rot;
+#define STEPS_PER_REVOLUTION 200    // Nombre de pas par tour du moteur
+#define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres
+
+#define MAX_SPEED 10000.0f
+#define ACCELERATION 5000.0f
+
+// Structure pour représenter une position et une orientation
+struct Pose {
+    float x; // Position en X (mm)
+    float y; // Position en Y (mm)
+    float rot; // Rotation en degrés
+
+    // Méthodes pour définir les valeurs
+    void setX(float _x) { x = _x; }
+    void setY(float _y) { y = _y; }
+    void setRot(float _rot) { rot = _rot; }
+
+    // Méthodes pour obtenir les valeurs
+    float getX() const { return x; }
+    float getY() const { return y; }
+    float getRot() const { return rot; }
+}; 
+
+extern Pose robotPose ; // Position absolue du robot
+
+enum StepMode {
+    EIGHTH_STEP,      // MS1 = GND, MS2 = GND
+    HALF_STEP,        // MS1 = GND, MS2 = VIO
+    QUARTER_STEP,     // MS1 = VIO, MS2 = GND
+    SIXTEENTH_STEP    // MS1 = VIO, MS2 = VIO
+};
 
 // Déclaration des fonctions
-void initMotion(); 
+
+void initMotion();
+void setStepMode(StepMode mode); 
 void enableMotors();
 void disableMotors();
-void setCoordinate(float _x, float _y, float _rot);
-void go(float dist, float angle);
+void setMaxSpeed(float _maxSpeed = MAX_SPEED);
+void setAcceleration(float _acceleration = ACCELERATION);
+void updateMotion();
+
+long convertDistToStep(float _dist);
+
+// Déplacements relatifs
+void go(float dist);
+void turn(float angle);
+void turnGo(float angle, float dist);
+
+// Déplacements absolus
 void goTo(float _x, float _y, float _rot);
-void updateMotors();
 
 
 #endif // MOTION_H

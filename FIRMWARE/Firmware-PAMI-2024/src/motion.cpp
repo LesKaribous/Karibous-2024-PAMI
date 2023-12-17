@@ -2,17 +2,12 @@
 #include "motion.h"
 
 // Position absolue du robot
-float   x = 0, 
-        y = 0,
-        rot = 0;
+Pose robotPose = {0.0f, 0.0f, 0.0f};
 
-// Position en nombre de steps des moteurs
-long posG = 0,
-     posD = 0;
 
-// Commande à atteindre pour chaque moteur
-long cmdG = 0,
-     cmdD = 0;
+StepMode currentStepMode = SIXTEENTH_STEP;
+int stepMultiplier = 16;
+float circumferenceMM = WHEEL_DIAMETER_MM * PI;
 
 AccelStepper stepperG(AccelStepper::DRIVER, STEP_X, DIR_X);
 AccelStepper stepperD(AccelStepper::DRIVER, STEP_Y, DIR_Y);
@@ -24,31 +19,51 @@ void initMotion(){
   pinMode(STEP_X,OUTPUT);
   pinMode(DIR_Y,OUTPUT);
   pinMode(STEP_Y,OUTPUT);
-
   pinMode(MS1,OUTPUT);
   pinMode(MS2,OUTPUT);
   // Configure les pas
-  digitalWrite(MS1,HIGH);
-  digitalWrite(MS2,HIGH);
+  setStepMode(SIXTEENTH_STEP);
   // Desactive les moteurs
   digitalWrite(EN,HIGH);
-  // Configure le moteur gauche
-  stepperG.setMaxSpeed(10000.0);
-  stepperG.setAcceleration(5000.0);
-  // Configure le moteur droit
-  stepperD.setMaxSpeed(10000.0);
-  stepperD.setAcceleration(5000.0);
+  // Configure les vitesses et accelerations
+  setMaxSpeed();
+  setAcceleration();
 }
 
-void setCoordinate(float _x, float _y, float _rot){
-  x = _x;
-  y = _y;
-  rot = _rot;
+void setMaxSpeed(float _maxSpeed){
+  stepperG.setMaxSpeed(_maxSpeed);
+  stepperD.setMaxSpeed(_maxSpeed);
 }
 
-void updateMotors(){
-  stepperG.run();
-  stepperD.run();
+void setAcceleration(float _acceleration){
+  stepperG.setAcceleration(_acceleration);
+  stepperD.setAcceleration(_acceleration);
+}
+
+void setStepMode(StepMode mode) {
+  currentStepMode = mode;
+  switch(mode) {
+    case EIGHTH_STEP:
+      digitalWrite(MS1, LOW);
+      digitalWrite(MS2, LOW);
+      stepMultiplier = 8;
+      break;
+    case HALF_STEP:
+      digitalWrite(MS1, LOW);
+      digitalWrite(MS2, HIGH);
+      stepMultiplier = 2;
+      break;
+    case QUARTER_STEP:
+      digitalWrite(MS1, HIGH);
+      digitalWrite(MS2, LOW);
+      stepMultiplier = 4;
+      break;
+    case SIXTEENTH_STEP:
+      digitalWrite(MS1, HIGH);
+      digitalWrite(MS2, HIGH);
+      stepMultiplier = 16;
+      break;
+  }
 }
 
 void enableMotors(){
@@ -57,4 +72,14 @@ void enableMotors(){
 
 void disableMotors(){
   digitalWrite(EN,HIGH);
+}
+
+void updateMotion(){
+  stepperG.run();
+  stepperD.run();
+}
+
+long convertDistToStep(float _dist) {
+  float revolutions = _dist / circumferenceMM;
+  return static_cast<long>(revolutions * STEPS_PER_REVOLUTION * stepMultiplier);
 }
