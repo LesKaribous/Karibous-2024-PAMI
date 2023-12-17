@@ -105,7 +105,8 @@ long convertDistToStep(float _dist) {
 
 // Convert angle to step for one wheel (robot turning on center)
 long convertAngleToStep(float _angle) {
-    float arcLength = (PI * (WHEEL_DISTANCE_MM / 2.0f) * _angle) / 360.0f; // Longueur de l'arc parcouru par chaque roue
+    float angleRadians = _angle * (PI / 180.0f); // Conversion en radians
+    float arcLength = (WHEEL_DISTANCE_MM / 2.0f) * angleRadians; // Longueur de l'arc parcouru par chaque roue
     float revolutions = arcLength / circumferenceMM;
     return static_cast<long>(revolutions * STEPS_PER_REVOLUTION * stepMultiplier);
 }
