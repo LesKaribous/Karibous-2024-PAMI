@@ -29,15 +29,14 @@ void initLCD(){
   u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
   u8g2.drawStr(0,8,"Hello !");	// write something to the internal memory
   u8g2.sendBuffer();					// transfer internal memory to the display
-  delay(1000);
 }
 
 void debugLCD(String message){
   const char* cstr = message.c_str();
   u8g2.clearBuffer();
-  u8g2.drawStr(0,8,cstr);
+  u8g2.setFont(u8g2_font_ncenB08_tr);	// Mini font for debug
+  u8g2.drawStr(0,30,cstr);
   u8g2.sendBuffer();
-  delay(1000);
 }
 
 void debug(String message){
