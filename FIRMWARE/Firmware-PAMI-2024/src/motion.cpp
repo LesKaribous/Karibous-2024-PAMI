@@ -2,7 +2,11 @@
 #include "motion.h"
 
 // Position absolue du robot
-Pose robotPose = {0.0f, 0.0f, 0.0f};
+Pose currentPose  = {0.0f, 0.0f, 0.0f};
+Pose targetPose   = {0.0f, 0.0f, 0.0f};
+// Déplacement cible polaire
+PolarMove targetMove = {0.0f, 0.0f, 0.0f};
+bool newPolarTarget = false;
 
 StepMode currentStepMode = SIXTEENTH_STEP;
 int stepMultiplier = 16;
@@ -84,18 +88,26 @@ void updateMotion(){
 
 void go(float _dist){
   // WARNING : Blocking function
+  // WIP
   long stepValue = convertDistToStep(_dist);
   motor_G.setTargetRel(-stepValue);
   motor_D.setTargetRel(stepValue);
-  motors.move(motor_G, motor_D);
+  motors.moveAsync(motor_G, motor_D);
+  debug("Processing...");
+  while(motors.isRunning())  delay(1); // See issue 73 : https://github.com/luni64/TeensyStep/issues/73
+  debug("Movement ok");
 }
 
 void turn(float _angle){
   // WARNING : Blocking function
+  // WIP
   long stepValue = convertAngleToStep(_angle);
   motor_G.setTargetRel(stepValue);
   motor_D.setTargetRel(stepValue);
-  motors.move(motor_G, motor_D);
+  motors.moveAsync(motor_G, motor_D);
+  debug("Processing...");
+  while(motors.isRunning())  delay(1); // See issue 73 : https://github.com/luni64/TeensyStep/issues/73
+  debug("Movement ok");
 }
 
 long convertDistToStep(float _dist) {
@@ -109,4 +121,72 @@ long convertAngleToStep(float _angle) {
     float arcLength = (WHEEL_DISTANCE_MM / 2.0f) * angleRadians; // Longueur de l'arc parcouru par chaque roue
     float revolutions = arcLength / circumferenceMM;
     return static_cast<long>(revolutions * STEPS_PER_REVOLUTION * stepMultiplier);
+}
+
+void convertToPolar(Pose _target){
+  convertToPolar(_target.x, _target.y, _target.rot);
+}
+
+void convertToPolar(float _x, float _y){
+  float dx = _x - currentPose.x;
+  float dy = _y - currentPose.y;
+
+  float targetAngleRadians = atan2(dy, dx);
+  float currentRotRadians = currentPose.rot * (M_PI / 180.0f);
+
+  targetMove.distance = sqrt(dx*dx + dy*dy);
+  targetMove.rotation1 = (targetAngleRadians - currentRotRadians) * (180.0f / M_PI);
+  targetMove.rotation1 = fmod(targetMove.rotation1 + 180.0f, 360.0f) - 180.0f;
+
+  targetMove.rotation2 = 0; // Pas de rotation finale
+
+  newPolarTarget = true;
+}
+
+void convertToPolar(float _x, float _y, float _rot){
+  float dx = _x - currentPose.x;
+  float dy = _y - currentPose.y;
+
+  float targetAngleRadians = atan2(dy, dx);
+  float currentRotRadians = currentPose.rot * (M_PI / 180.0f);
+  float targetRotRadians = _rot * (M_PI / 180.0f);
+
+  targetMove.distance = sqrt(dx*dx + dy*dy);
+  targetMove.rotation1 = (targetAngleRadians - currentRotRadians) * (180.0f / M_PI);
+  targetMove.rotation1 = fmod(targetMove.rotation1 + 180.0f, 360.0f) - 180.0f;
+
+  targetMove.rotation2 = (targetRotRadians - targetAngleRadians) * (180.0f / M_PI);
+  targetMove.rotation2 = fmod(targetMove.rotation2 + 180.0f, 360.0f) - 180.0f;
+
+  newPolarTarget = true;
+}
+
+void goTo(Pose _target){
+  goTo(_target.x, _target.y, _target.rot);
+}
+
+void goTo(float _x, float _y){
+  // TODO
+  // WIP
+  // Blocking --> to be changed
+  convertToPolar(_x,_y);
+  turn(targetMove.rotation1);
+  go(targetMove.distance);
+  currentPose.setX(_x);
+  currentPose.setY(_y);
+  //currentPose.setRot(_rot); // Récupérer ou calculer la rotation d'arrivée ? IDEE -> stocker dans le convertToPolar le resultat dans targetPose
+  newPolarTarget = false;
+}
+
+void goTo(float _x, float _y, float _rot){
+  // WIP
+  // Blocking --> to be changed
+  convertToPolar(_x,_y,_rot);
+  turn(targetMove.rotation1);
+  go(targetMove.distance);
+  currentPose.setX(_x);
+  currentPose.setY(_y);
+  turn(targetMove.rotation2);
+  currentPose.setRot(_rot);
+  newPolarTarget = false;
 }

@@ -15,7 +15,7 @@
 #define MAX_SPEED 10000.0f
 #define ACCELERATION 5000.0f
 
-// Structure pour représenter une position et une orientation
+// Structure pour représenter une position et une orientation absolue du robot
 struct Pose {
     float x; // Position en X (mm)
     float y; // Position en Y (mm)
@@ -32,7 +32,12 @@ struct Pose {
     float getRot() const { return rot; }
 }; 
 
-extern Pose robotPose ; // Position absolue du robot
+// Structure pour représenter undéplacement polaire relatif du robot
+struct PolarMove {
+    float rotation1; // Première rotation pour s'aligner vers la cible
+    float distance;  // Déplacement linéaire vers la cible
+    float rotation2; // Rotation finale pour ajuster l'orientation
+};
 
 enum StepMode {
     EIGHTH_STEP,      // MS1 = GND, MS2 = GND
@@ -60,7 +65,14 @@ void turn(float _angle);
 void turnGo(float _angle, float _dist);
 
 // Déplacements absolus
+void goTo(Pose _target);
+void goTo(float _x, float _y);
 void goTo(float _x, float _y, float _rot);
+
+// Converti la position demandée vers le targetPolarMove
+void convertToPolar(Pose _target);
+void convertToPolar(float _x, float _y);
+void convertToPolar(float _x, float _y, float _rot);
 
 
 #endif // MOTION_H
