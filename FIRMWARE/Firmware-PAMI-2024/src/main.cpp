@@ -49,18 +49,18 @@ void loop()
 
 void waitStart(){
   //Attendre que la tirette soit insérée
-  debug("Insert Tirette");
+  infoLCD("Insert Tirette");
   while(getTirette()) {
     delay(250); 
     checkColorTeam();
   }
   //Attendre que la tirette soit retirée
-  debug("Wait Start");
+  infoLCD("Wait Start");
   while(!getTirette()) {
     delay(250); 
     checkColorTeam();
   }
-  debug("Start Robot");
+  infoLCD("Start Robot");
   startTime = millis();
 }
 

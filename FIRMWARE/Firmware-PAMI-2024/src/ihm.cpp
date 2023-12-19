@@ -26,18 +26,44 @@ void initIHM(){
 void initLCD(){
   u8g2.begin();
   u8g2.clearBuffer();					// clear the internal memory
-  u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
-  u8g2.drawStr(0,8,"Hello !");	// write something to the internal memory
-  u8g2.sendBuffer();					// transfer internal memory to the display
+  infoLCD("Hello !");
 }
 
-void debugLCD(String message){
-  const char* cstr = message.c_str();
-  u8g2.clearBuffer();
-  u8g2.setFont(u8g2_font_ncenB08_tr);	// Mini font for debug
-  u8g2.drawStr(0,30,cstr);
-  u8g2.sendBuffer();
+void debugLCD(String message, u8g2_uint_t _y){
+  u8g2.setFont(u8g2_font_5x7_mf); // Mini font for debug - 6 heigh monospace
+  drawLCD(message, 0, _y);
 }
+
+void infoLCD(String message, u8g2_uint_t _y){
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  drawLCD(message, 0, _y);
+}
+
+
+void drawLCD(String message, u8g2_uint_t _x, u8g2_uint_t _y){
+    const char* cstr = message.c_str();
+
+    // Calculez la largeur et la hauteur de la chaîne à afficher
+    //u8g2_uint_t width = u8g2.getStrWidth(cstr);
+    u8g2_uint_t width = 128;
+    u8g2_uint_t height = u8g2.getMaxCharHeight();
+
+    // Position où le texte sera dessiné
+    u8g2_uint_t x = _x;
+    u8g2_uint_t y = _y;
+
+    // Effacez seulement la zone où le texte sera dessiné
+    u8g2.setDrawColor(0); // Couleur de fond pour "effacer"
+    u8g2.drawBox(x, y - height, width, height);
+    u8g2.setDrawColor(1); // Couleur de dessin pour le texte
+
+    // Dessinez le texte
+    u8g2.drawStr(x, y, cstr);
+
+    // Mettre à jour l'écran
+    u8g2.sendBuffer();
+}
+
 
 void debug(String message){
   if (modeDebug) Serial.println(message);
