@@ -13,9 +13,8 @@ int stepMultiplier = 16;
 float circumferenceMM = WHEEL_DIAMETER_MM * PI;
 
 // create the stepper motor object
-Stepper motor_G(STEP_G, DIR_G);   //STEP, DIR
-Stepper motor_D(STEP_D, DIR_D);   //STEP, DIR
-StepControl motors;
+AccelStepper motor_G(AccelStepper::DRIVER, STEP_G, DIR_G);
+AccelStepper motor_D(AccelStepper::DRIVER, STEP_D, DIR_D);
 
 void initMotion(){
   // Configure les pins
@@ -82,31 +81,28 @@ void disableMotors(){
   digitalWrite(EN,HIGH);
 }
 
-void updateMotion(){
-  // NA
-}
-
 void go(float _dist){
-  // WARNING : Blocking function
-  // WIP
   long stepValue = convertDistToStep(_dist);
-  motor_G.setTargetRel(-stepValue);
-  motor_D.setTargetRel(stepValue);
-  motors.moveAsync(motor_G, motor_D);
-  debug("Processing...");
-  while(motors.isRunning())  delay(1); // See issue 73 : https://github.com/luni64/TeensyStep/issues/73
-  debug("Movement ok");
+  motor_G.move(stepValue);
+  motor_D.move(-stepValue);
+  processMove();
 }
 
 void turn(float _angle){
+  long stepValue = convertAngleToStep(_angle);
+  motor_G.move(stepValue);
+  motor_D.move(stepValue);
+  processMove();
+}
+
+void processMove(){
   // WARNING : Blocking function
   // WIP
-  long stepValue = convertAngleToStep(_angle);
-  motor_G.setTargetRel(stepValue);
-  motor_D.setTargetRel(stepValue);
-  motors.moveAsync(motor_G, motor_D);
-  debug("Processing...");
-  while(motors.isRunning())  delay(1); // See issue 73 : https://github.com/luni64/TeensyStep/issues/73
+  debug("Processing Move...");
+  while(motor_D.isRunning() || motor_G.isRunning()){
+    motor_D.run();
+    motor_G.run();
+  }
   debug("Movement ok");
 }
 
@@ -135,8 +131,11 @@ void convertToPolar(float _x, float _y){
   float currentRotRadians = currentPose.rot * (M_PI / 180.0f);
 
   targetMove.distance = sqrt(dx*dx + dy*dy);
+
+  // Calculer la rotation la plus courte pour rotation1
   targetMove.rotation1 = (targetAngleRadians - currentRotRadians) * (180.0f / M_PI);
-  targetMove.rotation1 = fmod(targetMove.rotation1 + 180.0f, 360.0f) - 180.0f;
+  if (targetMove.rotation1 > 180.0f) targetMove.rotation1 -= 360.0f;
+  if (targetMove.rotation1 < -180.0f) targetMove.rotation1 += 360.0f;
 
   targetMove.rotation2 = 0; // Pas de rotation finale
 
@@ -152,11 +151,16 @@ void convertToPolar(float _x, float _y, float _rot){
   float targetRotRadians = _rot * (M_PI / 180.0f);
 
   targetMove.distance = sqrt(dx*dx + dy*dy);
-  targetMove.rotation1 = (targetAngleRadians - currentRotRadians) * (180.0f / M_PI);
-  targetMove.rotation1 = fmod(targetMove.rotation1 + 180.0f, 360.0f) - 180.0f;
 
+  // Calculer la rotation la plus courte pour rotation1
+  targetMove.rotation1 = (targetAngleRadians - currentRotRadians) * (180.0f / M_PI);
+  if (targetMove.rotation1 > 180.0f) targetMove.rotation1 -= 360.0f;
+  if (targetMove.rotation1 < -180.0f) targetMove.rotation1 += 360.0f;
+
+  // Calculer la rotation la plus courte pour rotation2
   targetMove.rotation2 = (targetRotRadians - targetAngleRadians) * (180.0f / M_PI);
-  targetMove.rotation2 = fmod(targetMove.rotation2 + 180.0f, 360.0f) - 180.0f;
+  if (targetMove.rotation2 > 180.0f) targetMove.rotation2 -= 360.0f;
+  if (targetMove.rotation2 < -180.0f) targetMove.rotation2 += 360.0f;
 
   newPolarTarget = true;
 }

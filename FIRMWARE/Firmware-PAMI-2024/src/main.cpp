@@ -41,10 +41,24 @@ void loop()
   //testMatch();
   
   enableMotors();
+  /*
+  turn(3600);
+  delay(1000);
+  */
+
+  
+  goTo(100,0,0);
+  goTo(100,100,90);
+  goTo(0,100,180);
+  goTo(0,0,0);
+  
+
+  /*
   go(100);
   turn(90);
   turn(-90);
   go(-100);
+  */
 }
 
 void waitStart(){

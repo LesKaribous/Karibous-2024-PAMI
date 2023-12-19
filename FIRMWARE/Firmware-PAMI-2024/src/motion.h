@@ -3,7 +3,7 @@
 #define MOTION_H
 
 #include <Arduino.h>
-#include <TeensyStep.h>
+#include <AccelStepper.h>
 
 #include "pins.h" 
 #include "ihm.h" 
@@ -12,8 +12,8 @@
 #define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres
 #define WHEEL_DISTANCE_MM 85.0f     // Distance entre les roues en millimètres
 
-#define MAX_SPEED 10000.0f
-#define ACCELERATION 5000.0f
+#define MAX_SPEED       5000.0
+#define ACCELERATION    2000.0
 
 // Structure pour représenter une position et une orientation absolue du robot
 struct Pose {
@@ -54,7 +54,8 @@ void enableMotors();
 void disableMotors();
 void setMaxSpeed(float _maxSpeed = MAX_SPEED);
 void setAcceleration(float _acceleration = ACCELERATION);
-void updateMotion();
+
+void processMove();
 
 long convertDistToStep(float _dist);
 long convertAngleToStep(float angle);
