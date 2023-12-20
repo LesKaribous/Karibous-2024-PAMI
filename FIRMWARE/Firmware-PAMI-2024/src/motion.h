@@ -12,8 +12,8 @@
 #define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres
 #define WHEEL_DISTANCE_MM 85.0f     // Distance entre les roues en millimètres
 
-#define MAX_SPEED       5000.0
-#define ACCELERATION    2000.0
+#define MAX_SPEED       20000.0
+#define ACCELERATION    5000.0
 
 // Structure pour représenter une position et une orientation absolue du robot
 struct Pose {
@@ -46,6 +46,10 @@ enum StepMode {
     SIXTEENTH_STEP    // MS1 = VIO, MS2 = VIO
 };
 
+// Déclaration des objets comme externes
+extern AccelStepper motor_D;
+extern AccelStepper motor_G;
+
 // Déclaration des fonctions
 
 void initMotion();
@@ -54,6 +58,7 @@ void enableMotors();
 void disableMotors();
 void setMaxSpeed(float _maxSpeed = MAX_SPEED);
 void setAcceleration(float _acceleration = ACCELERATION);
+void updateMotors();
 
 void processMove();
 

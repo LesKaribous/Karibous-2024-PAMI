@@ -27,7 +27,7 @@ void initMotion(){
   pinMode(MS2,OUTPUT);
 
   // Configure les pas
-  setStepMode(SIXTEENTH_STEP);
+  setStepMode(QUARTER_STEP);
   // Desactive les moteurs
   digitalWrite(EN,HIGH);
   // Configure les vitesses et accelerations
@@ -56,13 +56,13 @@ void setStepMode(StepMode mode) {
       stepMultiplier = 8;
       break;
     case HALF_STEP:
-      digitalWrite(MS1, LOW);
-      digitalWrite(MS2, HIGH);
+      digitalWrite(MS1, HIGH);
+      digitalWrite(MS2, LOW);
       stepMultiplier = 2;
       break;
     case QUARTER_STEP:
-      digitalWrite(MS1, HIGH);
-      digitalWrite(MS2, LOW);
+      digitalWrite(MS1, LOW);
+      digitalWrite(MS2, HIGH);
       stepMultiplier = 4;
       break;
     case SIXTEENTH_STEP:
@@ -95,13 +95,17 @@ void turn(float _angle){
   processMove();
 }
 
+void updateMotors(){
+  motor_D.run();
+  motor_G.run();
+}
+
 void processMove(){
   // WARNING : Blocking function
   // WIP
   debug("Processing Move...");
   while(motor_D.isRunning() || motor_G.isRunning()){
-    motor_D.run();
-    motor_G.run();
+    
   }
   debug("Movement ok");
 }
