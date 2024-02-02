@@ -1713,6 +1713,7 @@
   (no_connect (at 76.2 87.63) (uuid 6bce6cf0-6a13-4a34-bbbb-5f4dda28f0eb))
   (no_connect (at 271.78 105.41) (uuid 6e4b10ce-35f1-4b3a-891f-6413cb66e028))
   (no_connect (at 76.2 138.43) (uuid 7e5cd814-f94c-40c1-8971-e7eda25d65e3))
+  (no_connect (at 101.6 175.26) (uuid 8b53365b-2e87-4ab6-acf4-3eec39a61e87))
   (no_connect (at 271.78 87.63) (uuid a68c114f-75d4-44f5-83c2-28cb6a1e92e7))
   (no_connect (at 236.22 107.95) (uuid b000df8d-9dbf-4aef-a393-206130b6c034))
   (no_connect (at 271.78 107.95) (uuid b4417100-3fff-469d-807c-20fef369deaf))
@@ -2129,7 +2130,7 @@
   )
 
   (text_box "PIN USAGE : https://www.studiopieters.nl/esp32-s3-wroom-pinout/"
-    (at 74.93 147.32 0) (size 44.45 5.08)
+    (at 177.8 175.26 0) (size 44.45 5.08)
     (stroke (width 0) (type default))
     (fill (type none))
     (effects (font (size 1 1)) (justify left top))
@@ -2142,10 +2143,21 @@
     (effects (font (size 1.27 1.27)) (justify left top))
     (uuid 3eb5fb0b-fdb6-4d5f-b659-908132ca22b3)
   )
+  (text_box "(1) Do not install the capacitor. See Espressif documentation on page 29.\nOtherwise, the ESP starts directly in boot mode.\nhttps://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf"
+    (at 177.8 167.64 0) (size 87.63 6.35)
+    (stroke (width 0) (type default))
+    (fill (type none))
+    (effects (font (size 1 1)) (justify left top))
+    (uuid b95c8c11-6ec4-4556-9c83-dec3842c43c0)
+  )
 
   (text "Put near the \ntwo drivers\nTMC2208" (at 220.98 26.67 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 130b4665-8351-45aa-aec1-69fd679a4e20)
+  )
+  (text "(1)" (at 102.87 176.53 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 67337460-1e0b-4250-87aa-e13125a88dc0)
   )
   (text "45 - Strapping pin\n46 - Input Only" (at 168.6558 138.9382 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
