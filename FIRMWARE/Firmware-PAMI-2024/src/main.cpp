@@ -49,19 +49,21 @@ void setup() {
 void loop() 
 {
   //updateMatchTime();
-  //testAntenne();
+  testAntenne();
   //testSensor();
   //testMatch();
   
-  enableMotors();
+  //enableMotors();
   /*
   turn(3600);
   delay(1000);
   */
 
   
-  goTo(100,0,0);
-  goTo(0,0,0);
+  //goTo(100,0,0);
+  //goTo(0,0,0);
+  
+
   /*
   goTo(100,100,90);
   goTo(100,100,180);
