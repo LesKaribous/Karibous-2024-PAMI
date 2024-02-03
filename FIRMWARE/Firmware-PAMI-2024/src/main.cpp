@@ -14,7 +14,7 @@
 
 #define MATCH_TIME 100000
 
-TaskHandle_t Task1;
+//TaskHandle_t Task1;
 
 long elapsedTime  = 0;
 long startTime    = 0;
@@ -32,10 +32,11 @@ void setup() {
   initSensor();
   initMotion();
   initActuators();
-
   enableMotors();
+  antennasUp();
   waitStart();
 
+  /*
   xTaskCreatePinnedToCore(
     Task1code,   // Fonction de la tâche
     "Task1",     // Nom de la tâche
@@ -44,33 +45,30 @@ void setup() {
     1,           // Priorité de la tâche
     &Task1,      // Handle de la tâche
     0);          // Core où exécuter la tâche
+  */
 }
 
 void loop() 
 {
   //updateMatchTime();
-  testAntenne();
+  //testAntennas();
   //testSensor();
   //testMatch();
   
-  //enableMotors();
-  /*
-  turn(3600);
-  delay(1000);
-  */
-
+  enableMotors();
   
-  //goTo(100,0,0);
-  //goTo(0,0,0);
+  //turn(3600);
+  //delay(1000);
   
-
+  goTo(100,0,0);
+  goTo(0,0,0);
+  
   /*
   goTo(100,100,90);
   goTo(100,100,180);
   goTo(100,0,0);
   */
   
-
   /*
   go(100);
   turn(90);
@@ -115,7 +113,7 @@ void testMatch(){
     disableMotors(); // Desactive les moteurs
   }  
 }
-
+/*
 void Task1code(void* pvParameters) {
   for (;;) {
     // Code à exécuter en continu sur le core 0
@@ -127,3 +125,4 @@ void Task1code(void* pvParameters) {
     
   }
 }
+*/

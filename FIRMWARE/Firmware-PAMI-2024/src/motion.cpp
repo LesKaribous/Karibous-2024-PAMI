@@ -105,7 +105,7 @@ void processMove(){
   // WIP
   debug("Processing Move...");
   while(motor_D.isRunning() || motor_G.isRunning()){
-    
+    updateMotors();
   }
   debug("Movement ok");
 }

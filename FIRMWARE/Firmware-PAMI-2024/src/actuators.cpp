@@ -16,11 +16,19 @@ void initActuators(){
     );
 }
 
-void testAntenne(){
-  servoAntenne.write(45);
-  debug("Antenne 45");
+void antennasUp(){
+  servoAntenne.write(ANTENNA_UP);
+  debug("Antenna 120 (up)");
+}
+
+void antennasDown(){
+  servoAntenne.write(ANTENNA_DOWN);
+  debug("Antenna 45 (down)");
+}
+
+void testAntennas(){
+  antennasDown();
   delay(1000);
-  servoAntenne.write(120);
-  debug("Antenne 120");
+  antennasUp();
   delay(1000);
 }
