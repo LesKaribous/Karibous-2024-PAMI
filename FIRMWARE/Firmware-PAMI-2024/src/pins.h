@@ -2,7 +2,11 @@
 #ifndef PINS_H
 #define PINS_H
 
-// Pins Moteurs - Drivers
+// Pins Robot Number
+const int BotNumb01 = 2;
+const int BotNumb02 = 1;
+
+// Pins Motors - Drivers
 const int EN      = 48;
 const int STEP_G  = 11;
 const int DIR_G   = 10;
@@ -19,7 +23,7 @@ const int ledStatus = 5;
 // Pins servo
 const int pinServo  = 12;
 
-// Pins Capteurs
+// Pins Sensors
 const int xshutPins[2] = { 3,38 };
 
 #endif // PINS_H

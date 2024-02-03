@@ -5,7 +5,8 @@
 bool team = TEAM_BLUE;
 bool teamSelected = false;
 bool modeDebug = false; // Mettre son robot en mode debug : oui / Mettre son robot en mode "des bugs" : Non - HistoriCode97 - 03/12/2023
-bool modeDebugLCD = false;
+bool modeDebugLCD = true;
+byte robotNumber;
 
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R2); //HW stand for "Hardware"... You idiot
 Adafruit_NeoPixel led = Adafruit_NeoPixel(1, ledStatus, NEO_GRB + NEO_KHZ800);
@@ -14,6 +15,12 @@ void initIHM(){
     // Init pins
     pinMode(ColorTeam,INPUT_PULLUP);
     pinMode(Tirette,INPUT_PULLUP);
+    pinMode(BotNumb01,INPUT_PULLUP);
+    pinMode(BotNumb02,INPUT_PULLUP);
+    // Read robotNumber
+    bool bit1 = !digitalRead(BotNumb01);
+    bool bit2 = !digitalRead(BotNumb02);
+    robotNumber = (bit2 << 1) | bit1;
     // Init functions
     Wire.begin();
     Serial.begin(115200);
@@ -26,17 +33,35 @@ void initIHM(){
 void initLCD(){
   u8g2.begin();
   u8g2.clearBuffer();					// clear the internal memory
+  drawBackLcd();
   infoLCD("Hello !");
+}
+
+void drawBackLcd(){
+  // Draw Bot Number
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  String stringValue = String(getRobotNumber());  // Convertir le byte en String
+  const char* result = stringValue.c_str();       // Convertir la String en const char*
+  u8g2.drawStr(0, 9, result);
+  // Draw separators
+  u8g2.drawLine(0,15,128,15);
+  // Debug texte
+  u8g2.setFont(u8g2_font_5x7_mf); // Mini font for debug - 6 heigh monospace
+  u8g2.drawStr(0, 30, "debug: ");
+
+  // Mettre à jour l'écran
+  u8g2.sendBuffer();
 }
 
 void debugLCD(String message, u8g2_uint_t _y){
   u8g2.setFont(u8g2_font_5x7_mf); // Mini font for debug - 6 heigh monospace
-  drawLCD(message, 0, _y);
+  drawLCD(message, 35, _y);
 }
 
 void infoLCD(String message, u8g2_uint_t _y){
-  u8g2.setFont(u8g2_font_ncenB08_tr);
-  drawLCD(message, 0, _y);
+  u8g2.setFont(u8g2_font_5x7_mf); // Mini font for debug - 6 heigh monospace
+  //u8g2.setFont(u8g2_font_ncenB08_tr);
+  drawLCD(message, 55, _y);
 }
 
 
@@ -99,4 +124,8 @@ void initLedStatus(){
 
 bool getTirette(){
   return digitalRead(Tirette);
+}
+
+byte getRobotNumber(){
+  return robotNumber;
 }
