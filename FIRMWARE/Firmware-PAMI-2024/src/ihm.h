@@ -16,15 +16,17 @@
 // Déclaration des fonctions
 void initIHM();
 void initLCD();
+void drawSplashScreen();
 void drawBackLcd();
 void debug(String message);
-void debugLCD(String message, u8g2_uint_t _y = 30);   // Affiche un message sur la ligne de debug (dessous)
-void infoLCD(String message,  u8g2_uint_t _y = 8);   // Affiche un message sur la ligne info (dessus)
+void debugLCD(String message, u8g2_uint_t _y = 31);   // Affiche un message sur la ligne de debug (dessous)
+void infoLCD(String message,  u8g2_uint_t _y = 13);   // Affiche un message sur la ligne info (dessus)
 void drawLCD(String message, u8g2_uint_t _x, u8g2_uint_t _y); // Affiche un message et clear l'écran uniquement autour du message
 
 bool checkColorTeam();
 void initLedStatus();
 bool getTirette();
+byte readRobotNumber();
 byte getRobotNumber();
 
 // Déclaration des variables globales (extern)
