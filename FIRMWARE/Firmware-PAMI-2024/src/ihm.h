@@ -17,6 +17,7 @@
 void initIHM();
 void initLCD();
 void drawSplashScreen();
+void pairingFrame();
 void drawBackLcd();
 void debug(String message);
 void debugLCD(String message, u8g2_uint_t _y = 31);   // Affiche un message sur la ligne de debug (dessous)

@@ -32,8 +32,14 @@ void setup() {
   initSensor();
   initMotion();
   initActuators();
+
+  drawSplashScreen();
+  pairingFrame();
+  drawBackLcd();
+
   enableMotors();
   antennasUp();
+
   waitStart();
 
   /*
@@ -78,15 +84,21 @@ void loop()
 }
 
 void waitStart(){
+  //Attendre que la tirette n'est soit plus présente
+  infoLCD("Remove Tirette");
+  while(getTirette()) {
+    delay(250); 
+    checkColorTeam();
+  }
   //Attendre que la tirette soit insérée
   infoLCD("Insert Tirette");
-  while(getTirette()) {
+  while(!getTirette()) {
     delay(250); 
     checkColorTeam();
   }
   //Attendre que la tirette soit retirée
   infoLCD("Wait Start");
-  while(!getTirette()) {
+  while(getTirette()) {
     delay(250); 
     checkColorTeam();
   }

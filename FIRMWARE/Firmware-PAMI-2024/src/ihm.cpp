@@ -30,25 +30,48 @@ void initIHM(){
 void initLCD(){
   u8g2.begin();
   u8g2.clearBuffer();					// clear the internal memory
-  drawSplashScreen();
-  drawBackLcd();
+}
+
+void pairingFrame(){
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_streamline_interface_essential_wifi_t);
+  u8g2.drawGlyphX2(0,42,0x0032); // Draw signal ESPNow
+  // Mettre à jour l'écran
+  u8g2.sendBuffer();
+  delay(800);
+  // Draw Text
+  u8g2.setFont(u8g2_font_t0_22b_mf);
+  u8g2.drawStr(49, 13, "ESPNow");
+  u8g2.setFont(u8g2_font_5x7_mf);
+  u8g2.drawStr(50, 21, "Pairing ...");
+  u8g2.setFont(u8g2_font_tiny5_tf);
+  u8g2.drawStr(50, 30, "Plug tirette to ignore");
+  // Mettre à jour l'écran
+  u8g2.sendBuffer();
+  // Wait pairing or tirette
+  while(!getTirette())
+  {
+    delay(250);
+  }
+  u8g2.clearBuffer();
 }
 
 void drawSplashScreen(){
+  u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_streamline_coding_apps_websites_t);
   u8g2.drawGlyphX2(0,42,0x0043); // Draw LadyBug
   // Mettre à jour l'écran
   u8g2.sendBuffer();
-  delay(1000);
+  delay(800);
   // Draw Text
   u8g2.setFont(u8g2_font_t0_22b_mf);
-  u8g2.drawStr(50, 13, "PAMI 24");
+  u8g2.drawStr(49, 13, "PAMI 24");
   u8g2.setFont(u8g2_font_5x7_mf);
-  u8g2.drawStr(50, 23, "Les Karibous");
+  u8g2.drawStr(50, 21, "Les Karibous");
   // Créer une String avec la date et l'heure de compilation
   u8g2.setFont(u8g2_font_tiny5_tf);
   String compileDateTime = String(__DATE__) + " " + String(__TIME__);
-  u8g2.drawStr(50, 32, compileDateTime.c_str());
+  u8g2.drawStr(50, 30, compileDateTime.c_str());
   // Mettre à jour l'écran
   u8g2.sendBuffer();
   delay(2000);
@@ -143,7 +166,7 @@ void initLedStatus(){
 }
 
 bool getTirette(){
-  return digitalRead(Tirette);
+  return !digitalRead(Tirette);
 }
 
 byte readRobotNumber(){
