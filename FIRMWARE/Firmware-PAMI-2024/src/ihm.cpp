@@ -32,7 +32,7 @@ void initLCD(){
   u8g2.clearBuffer();					// clear the internal memory
 }
 
-void pairingFrame(){
+void pairingScreen(){
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_streamline_interface_essential_wifi_t);
   u8g2.drawGlyphX2(0,42,0x0032); // Draw signal ESPNow
@@ -95,6 +95,21 @@ void drawBackLcd(){
   u8g2.drawStr(0, 31, "debug: ");
   // Mettre à jour l'écran
   u8g2.sendBuffer();
+}
+
+bool initEspNow(){
+  WiFi.mode(WIFI_STA);
+
+  // Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    debug("Error init ESP-NOW !");
+    return false;
+  }
+  return true;
+}
+
+void printMacAdress(){
+  debug(WiFi.macAddress());
 }
 
 void debugLCD(String message, u8g2_uint_t _y){

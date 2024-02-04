@@ -6,6 +6,8 @@
 #include <U8g2lib.h>
 #include <Adafruit_NeoPixel.h>
 #include <Wire.h>
+#include <esp_now.h>
+#include <WiFi.h>
 
 #include "pins.h" 
 
@@ -17,8 +19,12 @@
 void initIHM();
 void initLCD();
 void drawSplashScreen();
-void pairingFrame();
+void pairingScreen();
 void drawBackLcd();
+
+bool initEspNow();
+void printMacAdress();
+
 void debug(String message);
 void debugLCD(String message, u8g2_uint_t _y = 31);   // Affiche un message sur la ligne de debug (dessous)
 void infoLCD(String message,  u8g2_uint_t _y = 13);   // Affiche un message sur la ligne info (dessus)
@@ -31,6 +37,7 @@ byte readRobotNumber();
 byte getRobotNumber();
 
 // Déclaration des variables globales (extern)
+extern bool espNowInit;
 extern bool team;
 //extern bool teamSelected;
 //extern bool modeDebug; // Mettre son robot en mode debug : oui / Mettre son robot en mode "des bugs" : Non - HistoriCode97 - 03/12/2023
