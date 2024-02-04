@@ -49,10 +49,11 @@ void pairingScreen(){
   // Mettre à jour l'écran
   u8g2.sendBuffer();
   // Wait pairing or tirette
-  while(!getTirette())
+  while(!getTirette() && !initEspNow())
   {
     delay(250);
   }
+  printMacAdress();
   u8g2.clearBuffer();
 }
 
@@ -109,7 +110,7 @@ bool initEspNow(){
 }
 
 void printMacAdress(){
-  debug(WiFi.macAddress());
+  Serial.println(WiFi.macAddress());
 }
 
 void debugLCD(String message, u8g2_uint_t _y){
