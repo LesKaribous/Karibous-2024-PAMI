@@ -15,6 +15,15 @@
 #define TEAM_BLUE 0
 #define TEAM_YELLOW 1
 
+// Définition des messages ESPNow et états
+#define UNDEFINED 99
+#define PAIRING 42
+#define PAIRED 60
+#define ARMED 70
+#define READY 80
+#define START_MATCH 126
+#define MATCH_STARTED 150
+
 // Déclaration des fonctions
 void initIHM();
 void initLCD();
@@ -24,6 +33,9 @@ void drawBackLcd();
 
 bool initEspNow();
 void printMacAdress();
+bool BroadcastMessage(int orderMessage);
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len);
 
 void debug(String message);
 void debugLCD(String message, u8g2_uint_t _y = 31);   // Affiche un message sur la ligne de debug (dessous)
@@ -35,9 +47,10 @@ void initLedStatus();
 bool getTirette();
 byte readRobotNumber();
 byte getRobotNumber();
+int getRobotState();
+void setRobotState(int state);
 
 // Déclaration des variables globales (extern)
-extern bool espNowInit;
 extern bool team;
 //extern bool teamSelected;
 //extern bool modeDebug; // Mettre son robot en mode debug : oui / Mettre son robot en mode "des bugs" : Non - HistoriCode97 - 03/12/2023

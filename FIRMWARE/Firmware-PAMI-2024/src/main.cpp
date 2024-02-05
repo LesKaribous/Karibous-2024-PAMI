@@ -79,17 +79,40 @@ void waitStart(){
   }
   //Attendre que la tirette soit insérée
   infoLCD("Insert Tirette");
-  while(!getTirette()) {
+  while(!getTirette() && getRobotState() != READY) {
     delay(250); 
     checkColorTeam();
   }
-  //Attendre que la tirette soit retirée
-  infoLCD("Wait Start");
-  while(getTirette()) {
-    delay(250); 
-    checkColorTeam();
+  // Si la tirette a été insérée
+  // Le robot va être lancés avec la tirette
+  // Les message de démarrage seront envoyé sur le réseau
+  // Seul le PAMI 1 envoi les messages
+  if(getTirette()){
+    BroadcastMessage(ARMED);
+    setRobotState(READY);
+    infoLCD("Wait Start");
+    //Attendre que la tirette soit retirée
+    while(getTirette())
+    {
+      delay(250); 
+      checkColorTeam();
+    }
+    BroadcastMessage(START_MATCH);
+    setRobotState(MATCH_STARTED);
+  }
+  else
+  {
+    // Cas des PAMIS 2 et 3 qui attendent le lancement du match sans tirette
+    infoLCD("Wait Start");
+    //Attendre l'ordre du PAMI 1
+    while(getRobotState() != MATCH_STARTED)
+    {
+      delay(250); 
+      checkColorTeam();
+    }
   }
   infoLCD("Start Robot");
+  // Démarrage du compteur !
   startTime = millis();
 }
 

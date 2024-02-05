@@ -7,9 +7,25 @@ bool teamSelected = false;
 bool modeDebug = false; // Mettre son robot en mode debug : oui / Mettre son robot en mode "des bugs" : Non - HistoriCode97 - 03/12/2023
 bool modeDebugLCD = true;
 byte robotNumber;
+int robotState = UNDEFINED;
 
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R2); //HW stand for "Hardware"... You idiot
 Adafruit_NeoPixel led = Adafruit_NeoPixel(1, ledStatus, NEO_GRB + NEO_KHZ800);
+
+// Définition variables pour ESPNow
+uint8_t PAMI_1[] = {0xF4, 0x12, 0xFA, 0x53, 0x6E, 0x60}; // Sender
+uint8_t PAMI_2[] = {0xF4, 0x12, 0xFA, 0x4C, 0x07, 0x94}; // Receiver
+uint8_t PAMI_3[] = {0xF4, 0x12, 0xFA, 0x53, 0x6D, 0x08}; // Receiver
+
+typedef struct message_struct {
+  int order;
+} message_struct;
+
+message_struct message;
+
+esp_now_peer_info_t peerInfo;
+
+// --------------------------------------------------------------------
 
 void initIHM(){
     // Init pins
@@ -99,18 +115,100 @@ void drawBackLcd(){
 }
 
 bool initEspNow(){
+  bool initState = false;
+  bool addPeerState = true;
+  bool messageState = true;
   WiFi.mode(WIFI_STA);
 
   // Init ESP-NOW
-  if (esp_now_init() != ESP_OK) {
+  if (esp_now_init() != ESP_OK) 
+  {
     debug("Error init ESP-NOW !");
-    return false;
+    initState = false;
+  } else {initState = true;}
+  // Si Init OK
+  if(initState == true)
+  {
+    if(robotNumber == 1) //Si Robot Principal
+    {
+      esp_now_register_send_cb(OnDataSent);
+      // register peer
+      peerInfo.channel = 0;
+      peerInfo.encrypt = false;
+      // register first peer
+      memcpy(peerInfo.peer_addr, PAMI_2, 6);
+      if (esp_now_add_peer(&peerInfo) != ESP_OK)
+      {
+        Serial.println("Failed to add peer");
+        addPeerState = false;
+      }else{addPeerState = true;}
+      // register second peer
+      memcpy(peerInfo.peer_addr, PAMI_3, 6);
+      if (esp_now_add_peer(&peerInfo) != ESP_OK)
+      {
+        Serial.println("Failed to add peer");
+        addPeerState = false;
+      }else{addPeerState = true;}
+    } else {esp_now_register_recv_cb(OnDataRecv);}// get recv packer info
   }
-  return true;
+  if(initState && addPeerState && robotNumber == 1)
+  {
+    messageState = BroadcastMessage(PAIRING);
+    if (messageState) robotState = PAIRED;
+  }
+  return initState && addPeerState && messageState;
 }
 
 void printMacAdress(){
   Serial.println(WiFi.macAddress());
+}
+
+bool BroadcastMessage(int orderMessage){
+
+  bool sendState = true;
+  message.order = orderMessage;
+
+  if(robotNumber == 1)
+  {
+    esp_err_t resultPami2 = esp_now_send(PAMI_2, (uint8_t *) &message, sizeof(message));
+    esp_err_t resultPami3 = esp_now_send(PAMI_3, (uint8_t *) &message, sizeof(message));
+
+    if (resultPami2 != ESP_OK || resultPami3 != ESP_OK ){
+      if (resultPami2 != ESP_OK) Serial.println("Error sending the data to PAMI2");
+      if (resultPami3 != ESP_OK) Serial.println("Error sending the data to PAMI3");
+      sendState = false;
+    }
+    else
+    {
+      Serial.println("Sent with success");
+      sendState = true;
+    }
+  }
+  return sendState;
+}
+
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  char macStr[18];
+  Serial.print("Packet to: ");
+  // Copies the sender mac address to a string
+  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+  Serial.print(macStr);
+  Serial.print(" send status:\t");
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
+
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&message, incomingData, sizeof(message));
+  Serial.print("Bytes received: ");
+  Serial.println(len);
+  Serial.print("order: ");
+  Serial.println(message.order);
+  if (message.order == PAIRING) robotState = PAIRED;
+  if (message.order == ARMED) robotState = READY;
+  if (message.order == START_MATCH) robotState = MATCH_STARTED;
+  Serial.println(robotState);
+  Serial.println();
 }
 
 void debugLCD(String message, u8g2_uint_t _y){
@@ -195,4 +293,12 @@ byte readRobotNumber(){
 
 byte getRobotNumber(){
   return robotNumber;
+}
+
+int getRobotState(){
+  return robotState;
+}
+
+void setRobotState(int state){
+  robotState = state;
 }
