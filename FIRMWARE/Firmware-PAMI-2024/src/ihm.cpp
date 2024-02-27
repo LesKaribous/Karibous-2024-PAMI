@@ -295,6 +295,10 @@ byte getRobotNumber(){
   return robotNumber;
 }
 
+bool getTeamColor(){
+  return team;
+}
+
 int getRobotState(){
   return robotState;
 }

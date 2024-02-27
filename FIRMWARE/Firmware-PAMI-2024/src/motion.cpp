@@ -6,6 +6,7 @@ Pose currentPose  = {0.0f, 0.0f, 0.0f};
 Pose targetPose   = {0.0f, 0.0f, 0.0f};
 // Déplacement cible polaire
 PolarMove targetMove = {0.0f, 0.0f, 0.0f};
+float tempTargetRotation = 0.0f;
 bool newPolarTarget = false;
 
 StepMode currentStepMode = SIXTEENTH_STEP;
@@ -100,6 +101,18 @@ void updateMotors(){
   motor_G.run();
 }
 
+void setCurrentY(float _y){
+  currentPose.setY(_y);
+}
+
+void setCurrentX(float _x){
+  currentPose.setX(_x);
+}
+
+void setCurrentRot(float _rot){
+  currentPose.setRot(_rot);
+}
+
 void processMove(){
   // WARNING : Blocking function
   // WIP
@@ -129,7 +142,7 @@ void convertToPolar(Pose _target){
 
 void convertToPolar(float _x, float _y){
   float dx = _x - currentPose.x;
-  float dy = _y - currentPose.y;
+  float dy = -(_y - currentPose.y);
 
   float targetAngleRadians = atan2(dy, dx);
   float currentRotRadians = currentPose.rot * (M_PI / 180.0f);
@@ -141,6 +154,8 @@ void convertToPolar(float _x, float _y){
   if (targetMove.rotation1 > 180.0f) targetMove.rotation1 -= 360.0f;
   if (targetMove.rotation1 < -180.0f) targetMove.rotation1 += 360.0f;
 
+  tempTargetRotation = targetAngleRadians * (180.0f / M_PI);
+
   targetMove.rotation2 = 0; // Pas de rotation finale
 
   newPolarTarget = true;
@@ -148,7 +163,7 @@ void convertToPolar(float _x, float _y){
 
 void convertToPolar(float _x, float _y, float _rot){
   float dx = _x - currentPose.x;
-  float dy = _y - currentPose.y;
+  float dy = -(_y - currentPose.y);
 
   float targetAngleRadians = atan2(dy, dx);
   float currentRotRadians = currentPose.rot * (M_PI / 180.0f);
@@ -182,7 +197,7 @@ void goTo(float _x, float _y){
   go(targetMove.distance);
   currentPose.setX(_x);
   currentPose.setY(_y);
-  //currentPose.setRot(_rot); // Récupérer ou calculer la rotation d'arrivée ? IDEE -> stocker dans le convertToPolar le resultat dans targetPose
+  currentPose.setRot(tempTargetRotation);
   newPolarTarget = false;
 }
 

@@ -47,6 +47,7 @@ void initLedStatus();
 bool getTirette();
 byte readRobotNumber();
 byte getRobotNumber();
+bool getTeamColor();
 int getRobotState();
 void setRobotState(int state);
 
