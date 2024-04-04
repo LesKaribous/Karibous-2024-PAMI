@@ -2,6 +2,8 @@
 #include "sensors.h"
 
 VL53L0X sensors[2];
+uint16_t sensor1 = 0;
+uint16_t sensor2 = 0;
 
 void initSensor(){
     Wire.begin();
@@ -42,14 +44,23 @@ void initSensor(){
     }
 }
 
-void testSensor(){
-    uint16_t sensor1 = sensors[0].readRangeContinuousMillimeters();
-    uint16_t sensor2 = sensors[1].readRangeContinuousMillimeters();
+
+bool readSensors(bool setDebug){
+    bool state = true;
+    sensor1 = sensors[0].readRangeContinuousMillimeters();
+    sensor2 = sensors[1].readRangeContinuousMillimeters();
     //uint16_t sensor1 = sensors[0].readRangeSingleMillimeters();
     //uint16_t sensor2 = sensors[1].readRangeSingleMillimeters();
 
-    if (sensors[0].timeoutOccurred()) { debug(" TIMEOUT"); }
-    if (sensors[1].timeoutOccurred()) { debug(" TIMEOUT"); }
-    String str = String(sensor1) + "   " + String(sensor2);
-    debug(str);
+    if (sensors[0].timeoutOccurred()) state = false;
+    if (sensors[1].timeoutOccurred()) state = false;
+
+    if (setDebug){
+        if ( state == true) {
+            String str = String(sensor1) + "   " + String(sensor2);
+            debug(str);
+        }
+        else debug(" TIMEOUT"); 
+    }
+    return state;
 }

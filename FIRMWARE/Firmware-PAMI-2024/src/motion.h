@@ -7,6 +7,7 @@
 
 #include "pins.h" 
 #include "ihm.h" 
+#include "sensors.h"
 
 #define STEPS_PER_REVOLUTION 200    // Nombre de pas par tour du moteur
 #define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres

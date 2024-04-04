@@ -35,7 +35,7 @@ void setup() {
   initActuators();
 
   drawSplashScreen();
-  pairingScreen();
+  //pairingScreen();
   drawBackLcd();
 
   enableMotors();
@@ -51,45 +51,33 @@ void loop()
 }
 
 void waitStart(){
-  //Attendre que la tirette n'est soit plus présente
+  // Attendre que la tirette n'est soit plus présente
   infoLCD("Remove Tirette");
   while(getTirette()) {
-    delay(250); 
+    delay(500); 
     checkColorTeam();
   }
-  //Attendre que la tirette soit insérée
+  // Attendre que la tirette soit insérée
   infoLCD("Insert Tirette");
-  while(!getTirette() && getRobotState() != READY) {
-    delay(250); 
+  while(!getTirette()) {
+    delay(500); 
     checkColorTeam();
   }
-  // Si la tirette a été insérée
-  // Le robot va être lancés avec la tirette
-  // Les message de démarrage seront envoyé sur le réseau
-  // Seul le PAMI 1 envoi les messages
-
+  // Datum position du PAMI
   delay(2000);
   datumPosition(getRobotNumber(), getTeamColor());
-
-
-  if(getTirette()){
-    BroadcastMessage(ARMED);
-    setRobotState(READY);
-    infoLCD("Wait Start");
-    //Attendre que la tirette soit retirée
-    while(getTirette()) delay(250);
-
-    BroadcastMessage(START_MATCH);
-    setRobotState(MATCH_STARTED);
-  }
-  else
-  {
-    // Cas des PAMIS 2 et 3 qui attendent le lancement du match sans tirette
-    infoLCD("Wait Start");
-    //Attendre l'ordre du PAMI 1
-    while(getRobotState() != MATCH_STARTED) delay(250);
-  }
-  infoLCD("Start Robot");
+  setRobotState(READY);
+  infoLCD("Robot Ready");
+  delay(2000);
+  // Attendre que la tirette soit bien insérée pour éviter les faux-départs
+  infoLCD("Insert Tirette");
+  while(!getTirette()) delay(500);
+  // Attendre que la tirette soit retirée pour débuter le match
+  infoLCD("Wait Start");
+  while(getTirette()) delay(250);
+  // Le match commence
+  setRobotState(MATCH_STARTED);
+  infoLCD("Go Match !");
   // Démarrage du compteur !
   startTime = millis();
 }
@@ -112,50 +100,32 @@ void datumPosition(int robotNumber, int teamColor){
   // Save Y position and orientation
   setCurrentY(CENTER_POSITION_MM);
   setCurrentRot(270);
-  // Go to safe position
-  goTo(0,80,270);
 
-  if(robotNumber == 1){
-    debug("datumPosition robot 1");
-    if(teamColor == TEAM_BLUE){
-      goTo(0,80,0);
-      go(-100);
-      // SaveX position and orientation
-      setCurrentX(1050+CENTER_POSITION_MM);
-      setCurrentRot(0);
-      // Go to safe position
-      goTo(1120,80,270);
-    }
-    else{
-      // WIP
-    }
+  if (teamColor == TEAM_BLUE){
+    
+    // Orientate robot
+    goTo(0,80,0);
+    go(-100);
+    // SaveX position and orientation
+    setCurrentX(1050+CENTER_POSITION_MM);
+    setCurrentRot(0);
+
+    if(robotNumber == 1) goTo(1120,80,270); // Go to safe position
+    else if(robotNumber == 2) goTo(1120+130,80,270); // Go to safe position
+    else if(robotNumber == 3) goTo(1120+260,80,270); // Go to safe position
+    else debug("ERROR robot number");
   }
-  else if(robotNumber == 2){
-    debug("datumPosition robot 2");
-    if(teamColor == TEAM_BLUE){
-      goTo(0,80,0);
-      go(-100);
-      // SaveX position and orientation
-      setCurrentX(1050+CENTER_POSITION_MM);
-      setCurrentRot(0);
-      // Go to safe position
-      goTo(1120+130,80,270);
-    }
-  }
-  else if(robotNumber == 3){
-    debug("datumPosition robot 3");
-    if(teamColor == TEAM_BLUE){
-      goTo(0,100,0);
-      go(-100);
-      // SaveX position and orientation
-      setCurrentX(1050+CENTER_POSITION_MM);
-      setCurrentRot(0);
-      // Go to safe position
-      goTo(1120+260,80,270);
-    }
-  }
-  else {
-    debug("ERROR robot number");
+  else if (teamColor == TEAM_YELLOW){
+    goTo(0,80,180);
+    go(-100);
+    // SaveX position and orientation
+    setCurrentX(1950-CENTER_POSITION_MM);
+    setCurrentRot(180);
+
+    if(robotNumber == 1) goTo(1880,80,270); // Go to safe position
+    else if(robotNumber == 2) goTo(1880-130,80,270); // Go to safe position
+    else if(robotNumber == 3) goTo(1880-260,80,270); // Go to safe position
+    else debug("ERROR robot number");
   }
 
   setMaxSpeed(MAX_SPEED);
@@ -186,7 +156,9 @@ void strategiePAMI(){
       antennasDown();
     }
     else{
-      // WIP
+      goTo(3000-750,180);
+      goTo(3000-750,0);
+      antennasDown();
     }
   }
   else if(getRobotNumber() == 2){
@@ -196,7 +168,9 @@ void strategiePAMI(){
       antennasDown();
     }
     else{
-      // WIP
+      goTo(3000-1200,300);
+      goTo(3000-400,300);
+      antennasDown();
     }
   }
   else if(getRobotNumber() == 3){
@@ -206,7 +180,9 @@ void strategiePAMI(){
       antennasDown();
     }
     else{
-      // WIP
+      goTo(3000-1350,450);
+      goTo(3000-0,550);
+      antennasDown();
     }
   }
 }

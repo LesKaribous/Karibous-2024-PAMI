@@ -11,6 +11,6 @@
 
 // Déclaration des fonctions
 void initSensor();
-void testSensor();
+bool readSensors(bool setDebug = false);
 
 #endif // SENSORS_H
