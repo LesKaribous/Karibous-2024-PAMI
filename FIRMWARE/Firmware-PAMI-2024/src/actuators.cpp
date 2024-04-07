@@ -18,12 +18,12 @@ void initActuators(){
 
 void antennasUp(){
   servoAntenne.write(ANTENNA_UP);
-  debug("Antenna 120 (up)");
+  //debug("Antenna 120 (up)");
 }
 
 void antennasDown(){
   servoAntenne.write(ANTENNA_DOWN);
-  debug("Antenna 45 (down)");
+  //debug("Antenna 45 (down)");
 }
 
 void testAntennas(){

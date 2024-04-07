@@ -9,9 +9,14 @@ PolarMove targetMove = {0.0f, 0.0f, 0.0f};
 float tempTargetRotation = 0.0f;
 bool newPolarTarget = false;
 
+int motionState = MOTION_WAIT;
+
 StepMode currentStepMode = SIXTEENTH_STEP;
 int stepMultiplier = 16;
 float circumferenceMM = WHEEL_DIAMETER_MM * PI;
+
+// Variable Opponent
+bool opponentChecking = false;
 
 // create the stepper motor object
 AccelStepper motor_G(AccelStepper::DRIVER, STEP_G, DIR_G);
@@ -34,7 +39,12 @@ void initMotion(){
   // Configure les vitesses et accelerations
   setMaxSpeed();
   setAcceleration();
+  // Motion est ready
+  setMotionState(MOTION_RUN);
+}
 
+void setMotionState(bool _state){
+  motionState = _state;
 }
 
 void setMaxSpeed(float _maxSpeed){
@@ -45,7 +55,6 @@ void setMaxSpeed(float _maxSpeed){
 void setAcceleration(float _acceleration){
    motor_G.setAcceleration(_acceleration); // steps/s^2 
    motor_D.setAcceleration(_acceleration); // steps/s^2 
-
 }
 
 void setStepMode(StepMode mode) {
@@ -97,8 +106,14 @@ void turn(float _angle){
 }
 
 void updateMotors(){
-  motor_D.run();
-  motor_G.run();
+  updateMatchTime();
+  if(getMatchState() != PAMI_STOP){
+    enableMotors();
+    motor_D.run();
+    motor_G.run();
+  }
+  else if (getMatchState() == PAMI_STOP)
+    disableMotors();
 }
 
 void setCurrentY(float _y){
@@ -113,12 +128,52 @@ void setCurrentRot(float _rot){
   currentPose.setRot(_rot);
 }
 
+void setOpponentChecking(bool _opponentChecking){
+  opponentChecking = _opponentChecking;
+}
+
+void setMotionState(int _motionState){
+  motionState = _motionState;
+}
+
 void processMove(){
-  // WARNING : Blocking function
-  // WIP
+
+  long tempDistance_D = 0;
+  long tempDistance_G = 0;
+
   debug("Processing Move...");
   while(motor_D.isRunning() || motor_G.isRunning()){
     updateMotors();
+    if (opponentChecking){
+      if (checkOpponent()){
+        debug("Opponent detected");
+
+        tempDistance_D = motor_D.distanceToGo();
+        tempDistance_G = motor_G.distanceToGo();
+
+        setAcceleration(STOP_ACCELERATION);
+        setMaxSpeed(STOP_SPEED);
+
+        motor_D.move(0);
+        motor_G.move(0);
+
+        tempDistance_D = tempDistance_D + motor_D.distanceToGo();
+        tempDistance_G = tempDistance_G + motor_G.distanceToGo();
+
+        updateMotors();
+        while(motor_D.isRunning() || motor_G.isRunning()) updateMotors();
+        while(checkOpponent()){
+          updateMatchTime();
+          debug ("Opponent still here");
+        }
+
+        setAcceleration(MAX_ACCELERATION);
+        setMaxSpeed(MAX_SPEED);
+
+        motor_D.move(tempDistance_D);
+        motor_G.move(tempDistance_G);
+      }
+    }
   }
   debug("Movement ok");
 }
@@ -189,9 +244,6 @@ void goTo(Pose _target){
 }
 
 void goTo(float _x, float _y){
-  // TODO
-  // WIP
-  // Blocking --> to be changed
   convertToPolar(_x,_y);
   turn(targetMove.rotation1);
   go(targetMove.distance);
@@ -202,8 +254,6 @@ void goTo(float _x, float _y){
 }
 
 void goTo(float _x, float _y, float _rot){
-  // WIP
-  // Blocking --> to be changed
   convertToPolar(_x,_y,_rot);
   turn(targetMove.rotation1);
   go(targetMove.distance);

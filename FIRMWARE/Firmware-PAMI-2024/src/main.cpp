@@ -4,25 +4,9 @@
 #include "sensors.h"
 #include "actuators.h"
 #include "motion.h"
-
-#define PAMI_WAIT 0
-#define PAMI_RUN 1
-#define PAMI_END 2
-
-#define TIME_START_PAMI 4000
-#define TIME_END_PAMI 100000
-
-#define MATCH_TIME 100000
-
-//TaskHandle_t Task1;
-
-long elapsedTime  = 0;
-long startTime    = 4000;
-int  statePAMI = PAMI_WAIT;
-
+#include "match.h"
 
 void waitStart();
-void updateMatchTime();
 void datumPosition(int robotNumber, int teamColor);
 void match();
 void strategiePAMI();
@@ -79,15 +63,7 @@ void waitStart(){
   setRobotState(MATCH_STARTED);
   infoLCD("Go Match !");
   // Démarrage du compteur !
-  startTime = millis();
-}
-
-void updateMatchTime(){
-  elapsedTime = millis() - startTime ;
-  if(statePAMI != PAMI_END){
-    if(elapsedTime>= TIME_END_PAMI)         statePAMI = PAMI_END;
-    else if(elapsedTime>= TIME_START_PAMI)  statePAMI = PAMI_RUN;
-  }
+  startMatch();
 }
 
 void datumPosition(int robotNumber, int teamColor){
@@ -133,12 +109,12 @@ void datumPosition(int robotNumber, int teamColor){
 }
 
 void match(){
-  if(statePAMI == PAMI_RUN){
+  if(getMatchState() == PAMI_RUN){
     enableMotors();
     strategiePAMI();
-    statePAMI = PAMI_END;
+    setMatchState(PAMI_STOP);
   }
-  else if (statePAMI == PAMI_END){
+  else if (getMatchState() == PAMI_STOP){
     disableMotors(); // Desactive les moteurs
     while(1); // Fin de match
   }
@@ -149,14 +125,17 @@ void match(){
 
 void strategiePAMI(){
 
+  setOpponentChecking(true);
   if(getRobotNumber() == 1){
     if(getTeamColor() == TEAM_BLUE){
       goTo(750,180);
+      setOpponentChecking(false);
       goTo(750,0);
       antennasDown();
     }
     else{
       goTo(3000-750,180);
+      setOpponentChecking(false);
       goTo(3000-750,0);
       antennasDown();
     }
@@ -164,11 +143,15 @@ void strategiePAMI(){
   else if(getRobotNumber() == 2){
     if(getTeamColor() == TEAM_BLUE){
       goTo(1200,300);
+      goTo(600,300);
+      setOpponentChecking(false);
       goTo(400,300);
       antennasDown();
     }
     else{
       goTo(3000-1200,300);
+      goTo(3000-600,300);
+      setOpponentChecking(false);
       goTo(3000-400,300);
       antennasDown();
     }
@@ -176,11 +159,15 @@ void strategiePAMI(){
   else if(getRobotNumber() == 3){
     if(getTeamColor() == TEAM_BLUE){
       goTo(1350,450);
+      goTo(400,550);
+      setOpponentChecking(false);
       goTo(0,550);
       antennasDown();
     }
     else{
       goTo(3000-1350,450);
+      goTo(3000-400,550);
+      setOpponentChecking(false);
       goTo(3000-0,550);
       antennasDown();
     }

@@ -50,7 +50,6 @@ byte getRobotNumber();
 bool getTeamColor();
 int getRobotState();
 void setRobotState(int state);
-
 // Déclaration des variables globales (extern)
 extern bool team;
 //extern bool teamSelected;

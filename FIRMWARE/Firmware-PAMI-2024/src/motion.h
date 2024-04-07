@@ -8,6 +8,7 @@
 #include "pins.h" 
 #include "ihm.h" 
 #include "sensors.h"
+#include "match.h"
 
 #define STEPS_PER_REVOLUTION 200    // Nombre de pas par tour du moteur
 #define WHEEL_DIAMETER_MM 60.0f     // Diamètre de la roue en millimètres
@@ -19,7 +20,14 @@
 #define DATUM_SPEED    5000.0
 #define DATUM_ACCELERATION 500.0
 
+#define STOP_SPEED      20000.0
+#define STOP_ACCELERATION   4000.0
+
 #define CENTER_POSITION_MM 50       // Valeur entre l'arriere du robot et le centre des roues en millimètres
+
+#define MOTION_WAIT 0
+#define MOTION_RUN 1
+#define MOTION_STOP 2
 
 // Structure pour représenter une position et une orientation absolue du robot
 struct Pose {
@@ -71,6 +79,8 @@ void setCurrentX(float _x);
 void setCurrentRot(float _rot);
 
 void processMove();
+void setOpponentChecking(bool _opponentChecking);
+void setMotionState(int _motionState);
 
 long convertDistToStep(float _dist);
 long convertAngleToStep(float angle);
