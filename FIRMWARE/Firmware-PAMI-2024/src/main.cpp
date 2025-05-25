@@ -23,6 +23,8 @@ void setup() {
   drawBackLcd();
 
   enableMotors();
+  antennasDown();
+  delay(1000);
   antennasUp();
 
   waitStart();

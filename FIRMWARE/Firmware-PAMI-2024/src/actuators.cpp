@@ -26,6 +26,14 @@ void antennasDown(){
   //debug("Antenna 45 (down)");
 }
 
+void penDown(){
+  antennasUp();
+}
+
+void penUp(){
+  antennasDown();
+}
+
 void testAntennas(){
   antennasDown();
   delay(1000);
