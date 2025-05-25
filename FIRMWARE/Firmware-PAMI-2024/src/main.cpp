@@ -10,6 +10,7 @@ void waitStart();
 void datumPosition(int robotNumber, int teamColor);
 void match();
 void strategiePAMI();
+void drawing();
 
 void setup() {
 
